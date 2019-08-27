@@ -3,11 +3,13 @@
 //before all, we clear the screen ^^
 console.clear();
 
-// we use enquire to
+//
 const { prompt } = require("enquirer");
+const { Confirm } = require("enquirer");
 const boxen = require("boxen");
+const actionHandler = require("./ActionHandler");
 
-const player = {
+let player = {
   name: "",
   for: 0,
   agi: 0,
@@ -33,12 +35,14 @@ const prompts = async (Type, message) => {
     });
     return response.inpt;
   }
-
-  if (Type == "password") {
-    let result = readlineSync.question(message, {
-      hideEchoBack: true
+  if (Type == "confirm") {
+    const prompt = new Confirm({
+      name: "question",
+      message: message
     });
-    return result;
+
+    answer = await prompt.run();
+    console.log(answer);
   }
 };
 
@@ -54,7 +58,7 @@ const displayPlayerStat = playerStat => {
     int: ${playerStat.int}   cha: ${playerStat.cha}
     
     
-    exp: ${player.exp}/${player.nextLvl}   lvl: ${player.lvl}
+    exp: ${playerStat.exp}/${playerStat.nextLvl}   lvl: ${playerStat.lvl}   point:${playerStat.basePoint}
     `)
   );
 };
@@ -63,28 +67,44 @@ const displayPlayerStat = playerStat => {
 const modPlayer = async (playerStat, context) => {
   let temporaryPlayerStat = playerStat; // this object will be used for confirmation at the end
   let modPlayerloop = 1; // while this is 1, the loop continue
-  while (modPlayerloop) { 
+
+  let action = {}; // will containt availaible action and object
+  let obj = {};
+
+  // commande dispo a la premiere initialisation
+  if (context == "first") {
+    action.up = actionHandler.up();
+    action.down = actionHandler.down();
+    action.modify = actionHandler.modify();
+    action.start = actionHandler.start();
+    //console.log(action)
+    console.log("action => force agility wisdom inteligence charisma name ");
+  }
+
+  // commande dispo quand on affiche sa fiche de carac
+  if (context == "normal") {
+    console.log("action => up down modify exit");
+    console.log("object => force agility wisdom inteligence charisma ");
+  }
+  while (modPlayerloop) {
     console.clear();
     console.log(boxen("Player Sheet."));
+
     displayPlayerStat(temporaryPlayerStat);
+
     console.log("use the prompt to do something : action object ");
-    // commande dispo a la premiere initialisation
-    if (context == "first") {
-      console.log("action => up down modify start");
-      console.log("action => force agility wisdom inteligence charisma name ");
-    }  
-    // commande dispo quand on affiche sa fiche de carac
-    if (context == "normal"){
-      console.log("action => up down modify finished help ");
-      console.log("object => force agility wisdom inteligence charisma ");
-    }
-    let action = await prompts("text","what do you want to do?");
+
+    let UserInput = await prompts("text", "what do you want to do?");
+
+    // this line cut the prompt in array
+    let arg = UserInput.split(" ");
   }
 };
 
-
-(async () => { // main loop
+(async () => {
+  // main loop
   console.clear();
   player.name = await prompts("text", "Quel est le nom de votre personnage?");
-  modPlayer(player, "first");
+  player = modPlayer(player, "first"); // the player will be replaced by the modified content of itself via the function
+  console.log(player);
 })();

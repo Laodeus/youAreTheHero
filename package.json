@@ -15,7 +15,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "youarethehero": "./bin/index.js"
+    "youarethehero": "./bin/index.js",
+    "start":"nodemon ./bin/index.js"
   },
   "author": "Laodeus",
   "license": "MIT"
