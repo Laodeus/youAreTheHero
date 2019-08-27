@@ -1,0 +1,22 @@
+{
+  "name": "@laodeus/youarethehero",
+  "version": "1.0.0",
+  "description": "A package where YOU are the hero( at work :D )",
+  "main": "./bin/index.js",
+  "bin": {
+    "youarethehero": "./bin/index.js"
+  },
+  "dependencies": {
+    "boxen": "^4.1.0",
+    "enquirer": "^2.3.1",
+    "eslint": "^6.2.2",
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "youarethehero": "./bin/index.js"
+  },
+  "author": "Laodeus",
+  "license": "MIT"
+}
