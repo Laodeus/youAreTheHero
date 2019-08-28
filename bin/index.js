@@ -15,6 +15,8 @@ const objHandler = require("./objHandler");
 // main loop auto launched with (()=>{})()
 (async () => {
   console.clear();
-  playerHandler.player.name = await promptsHandler.text("Quel est le nom de votre personnage?");
+  playerHandler.player.name = await promptsHandler.text("Player name?");
   playerHandler.player = await playerSheetHandler.modPlayer(playerHandler.player, "first"); // the player will be replaced by the modified content of itself via the function
+  console.clear();
+  console.log(playerHandler);
 })();
