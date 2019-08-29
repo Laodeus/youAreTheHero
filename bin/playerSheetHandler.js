@@ -116,12 +116,13 @@ exports.displayPlayerStat = playerStat => {
         boxen(`
       name: ${playerStat.name}   race: ${playerStat.race}   class: ${playerStat.class}      
       
-      
+      pv: ${playerStat.pv}
       for: ${playerStat.force}   agi: ${playerStat.agility}   wis: ${playerStat.wisdom}
+      int: ${playerStat.inteligence}   cha: ${playerStat.charisma+playerStat.force}
       
-      int: ${playerStat.inteligence}   cha: ${playerStat.charisma}
-      
-      
+      initiative:${playerStat.agility+playerStat.inteligence}    parade:${playerStat.inteligence+playerStat.wisdom}    accuracy:${playerStat.agility+playerStat.wisdom}
+      intimidation:${playerStat.charisma+playerStat.force}    courage: ${playerStat.inteligence+playerStat.force}
+
       exp: ${playerStat.exp}/${playerStat.nextLvl}   lvl: ${playerStat.lvl}   point:${playerStat.basePoint}
       `)
     );
