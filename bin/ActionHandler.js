@@ -1,19 +1,25 @@
 const playerHandler = require("./playerHandler");
 const promptsHandler = require("./promptsHandler");
 const classHandler = require("./classHandler");
+const raceHandler = require("./raceHandler");
 
+/*===================================================
+
+Function for handle the user sheet
+
+===================================================*/
 exports.up = async (CharacInitialValue, charackeyString, characToprocess, temporaryBasePoint) => {
     // arg the value of the charac that the objhandler is charged to find in playerstat
     // the charac string formated
     // the charac that you have to up
     // all the argument passed by the user prompt, 
-    if (playerHandler.player.basePoint > 0) {
+    if (temporaryBasePoint > 0) {
         return [++characToprocess, --temporaryBasePoint];
     }
     else {
         console.clear();
         console.log(`Sorry, You don't have anough point to upgrade your ${charackeyString}`);
-        return characToprocess, temporaryBasePoint;
+        return [characToprocess, temporaryBasePoint];
     }
 }
 
@@ -26,12 +32,6 @@ exports.down = async (CharacInitialValue, charackeyString, characToprocess, temp
         await promptsHandler.confirm(`Sorry, You can't downgrade your ${charackeyString}.`);
         return characToprocess, temporaryBasePoint;
     }
-}
-
-
-exports.modify = (arg) => {
-    console.log("modify");
-    return;
 }
 
 exports.start = async (temporaryPlayerStat) => {
@@ -51,22 +51,33 @@ exports.modify = async (arg) => {
         let resp = await promptsHandler.text("new player name:");
         return resp
     }
+    if (arg == "race") {
+        console.clear();
+        console.log(`race => ${Object.keys(raceHandler.races)}`)
+        let resp = await promptsHandler.text("chose player race:");
+        if (raceHandler.races[resp.split(' ')[0]] != undefined) {
+            return raceHandler.races[resp.split(' ')[0]];
+        }
+        else {
+            console.clear();
+            await promptsHandler.confirm("Invalid class");
+        }
+    }
     if (arg == "class") {
         while (1) {
             console.clear();
             console.log(`classes => ${Object.keys(classHandler.classes)}`)
             let resp = await promptsHandler.text("chosse player class:");
             if (classHandler.classes[resp.split(' ')[0]] != undefined) {
-                return resp
+                return classHandler.classes[resp.split(' ')[0]];
             }
             else {
                 console.clear();
                 await promptsHandler.confirm("Invalid class");
-
             }
         }
     }
-    if (arg == "race") {
+    if (arg == "name") {
         let resp = await promptsHandler.text("new player race:");
         return resp
     }
@@ -75,3 +86,4 @@ exports.modify = async (arg) => {
 exports.reset = () => {
     return playerHandler.player
 }
+

@@ -36,8 +36,19 @@ exports.modPlayer = async (playerStat, context) => {
 
     // commande dispo quand on affiche sa fiche de carac
     if (context == "normal") {
-
+            //action avalaible for the player in this case
+            action.up = actionHandler.up;
+            action.down = actionHandler.down;
+            action.start = actionHandler.start;
+            //object available for the player.
+            obj.force = objHandler.force;
+            obj.agility = objHandler.agility;
+            obj.wisdom = objHandler.wisdom;
+            obj.inteligence = objHandler.inteligence;
+            obj.charisma = objHandler.charisma;
+            
     }
+    
     while (modPlayerloop) {
         console.clear();
         console.log(boxen("Player Sheet."));
@@ -80,9 +91,11 @@ exports.modPlayer = async (playerStat, context) => {
         }
         else if (arg[0] == "modify" && (arg[1] == "name" ||arg[1] == "class" ||arg[1] == "race") ) 
         {
-            newStat = await action[arg[0]](arg[1]);
-
-            // je modifie mes stats ici
+            
+            arg[1] == "class"? temporaryPlayerStat = {...temporaryPlayerStat, ...await action[arg[0]](arg[1])}:"";
+            arg[1] == "name"? temporaryPlayerStat.name = await action[arg[0]](arg[1]):"";
+            arg[1] == "race"? temporaryPlayerStat.race = await action[arg[0]](arg[1]):"";
+            
 
         }
         else if (arg[0] == "start") {
