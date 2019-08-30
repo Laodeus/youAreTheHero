@@ -29,17 +29,16 @@ exports.mapIndexFrom = 1;
   }
   else {
 
-
+    playerHandler.player = {...playerHandler.player, ...classHandler.classes.warrior  };
     playerHandler.player.name = await promptsHandler.text("Player name?");
 
     playerHandler.player = await playerSheetHandler.modPlayer(playerHandler.player, "first"); // the player will be replaced by the modified content of itself via the function
   }
   console.clear();
   while (1) {
-    if(playerHandler.player.status != "alive"){break}
-    console.clear();
+    //if(playerHandler.player.status != "alive"){break}
+    
     await actionHandler.displayMapInfo(this.mapIndex, this.mapIndexFrom);
 
   }
-  console.log(playerHandler.player)
 })();

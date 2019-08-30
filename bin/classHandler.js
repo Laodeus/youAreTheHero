@@ -18,7 +18,9 @@ exports.classes = {
           hit:castHanler.hit,
           berserk:castHanler.berserkhit
         },
-        equipment:{}
+        equipment:{},
+        status:"alive"
+
       },
       mage:{
         pv:20,
@@ -34,7 +36,9 @@ exports.classes = {
         
         class: "mage",
         cast: {},
-        equipment:{}
+        equipment:{},
+        status:"alive"
+        
       },
       thief:{
         pv:35,
@@ -50,7 +54,8 @@ exports.classes = {
         
         class: "thief",
         cast: {},
-        equipment:{}
+        equipment:{},
+        status:"alive"
       },
       peasant:{
         pv:30,
@@ -68,7 +73,8 @@ exports.classes = {
         cast: {
 
         },
-        equipment:{}
+        equipment:{},
+        status:"alive"
       },
       
 
