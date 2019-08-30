@@ -14,5 +14,6 @@ exports.player = {
     class: "peasant",
     race: "human",
     cast: {},
-    equipment:{}
+    equipment:{},
+    status:"alive"
   };

@@ -6,6 +6,7 @@ const raceHandler = require("./raceHandler");
 const mapHandler = require("./mapHandler");
 const pjHandler = require("./pjHandler");
 const index = require("./index");
+const randHandler = require("./randHandler");
 /*===================================================
 
 Function for handle the user sheet
@@ -94,7 +95,7 @@ Function for handle the game room
 
 ===================================================*/
 
-exports.generateRoom = () => { // c'est ici qu'on genere les enemis dans les rooms
+exports.generateRoom = async () => { // c'est ici qu'on genere les enemis dans les rooms
 
     mapHandler.map[5].enemis = {
         zombie1: {
@@ -106,10 +107,142 @@ exports.generateRoom = () => { // c'est ici qu'on genere les enemis dans les roo
             ...pjHandler.enemi.zombie,
             status: "alive"
 
-        },
+        }
     }
+    mapHandler.map[3].enemis = {
+        zombiedog: {
+            ...pjHandler.enemi.zombieDog,
+            status: "alive"
 
+        }
+    }
+    mapHandler.map[4].enemis = {
+        goule: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
 
+        }
+    }
+    mapHandler.map[6].enemis = {
+        goule: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        zombie1: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie2: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        }
+    }
+    mapHandler.map[7].enemis = {
+        goule1: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        goule2: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        zombie1: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie2: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie3: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie4: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        }
+    }
+    mapHandler.map[9].enemis = {
+        littleDemon: {
+            ...pjHandler.enemi.littleDemon,
+            status: "alive"
+
+        }
+    }
+    mapHandler.map[10].enemis = {
+        vampire: {
+            ...pjHandler.enemi.vampire,
+            status: "alive"
+
+        }
+    }
+    mapHandler.map[11].enemis = {
+        shadowpriest: {
+            ...pjHandler.enemi.shadowpriest,
+            status: "alive"
+
+        }
+    }
+    mapHandler.map[13].enemis = {
+        goule1: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        goule2: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        vampire: {
+            ...pjHandler.enemi.vampire,
+            status: "alive"
+
+        }
+    }
+    mapHandler.map[14].enemis = {
+        goule1: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        goule2: {
+            ...pjHandler.enemi.goule,
+            status: "alive"
+
+        },
+        zombie1: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie2: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie3: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        },
+        zombie4: {
+            ...pjHandler.enemi.zombie,
+            status: "alive"
+
+        }
+    }
+    
 }
 
 /*===================================================
@@ -129,71 +262,68 @@ exports.displayMapInfo = async (mapIndex, from) => {
     let ennemisCount = 0;
     let aliveEnemisCount = 0;
     if (mapHandler.map[mapIndex].enemis != undefined) {
-        ennemisCount=  Object.entries(mapHandler.map[mapIndex].enemis).length;
-        Object.entries(mapHandler.map[mapIndex].enemis).forEach((elem)=>{
-            console.log("ennemi : " + elem[0] +" / status:" + elem[1].status );
-            elem[1].status == "alive"? aliveEnemisCount++: aliveEnemisCount;
+        ennemisCount = Object.entries(mapHandler.map[mapIndex].enemis).length;
+        Object.entries(mapHandler.map[mapIndex].enemis).forEach((elem) => {
+            console.log("ennemi : " + elem[0] + " / status:" + elem[1].status);
+            elem[1].status == "alive" ? aliveEnemisCount++ : aliveEnemisCount;
         });
     }
 
     //on défini les action que l'utilisateur peux faire.
     action.playerstat = playerSheetHandler.modPlayer;
-    if(aliveEnemisCount > 0 ){
-        
+    if (aliveEnemisCount > 0) {
+
         action.attack = this.attack;
         action.enemistat = this.displayEnemiStat;
         action.goto = this.goto;
 
-        obj[from] = [from]; 
+        obj[from] = [from];
 
         console.log(`${aliveEnemisCount} enemis alive. you can attack or go back.`);
 
         console.log(`use  ${Object.keys(action)}`);
         console.log(`on ${Object.keys(obj)}`);
 
-        
+
     }
-    else{
+    else {
         console.log(`${aliveEnemisCount} enemis alive. go where you want.`);
         action.goto = this.goto;
 
-        obj = {...mapHandler.map[mapIndex].linkedTo};
-        
+        obj = { ...mapHandler.map[mapIndex].linkedTo };
+
 
         console.log(`use ${Object.keys(action)}`);
         console.log(`You can ${Object.values(obj)}`);
-        
+
     }
 
-    
+
     // on demande ce que l'utilisateur veux faire
     let UserInput = await promptsHandler.text("what do you want to do?");
-    let arg  = UserInput.split(" ");
-    
-    
+    let arg = UserInput.split(" ");
+
+
     // on traite la demande. 
-    if (arg[0] == "goto" &&Object.values(obj).findIndex(el=>el == arg[1]) > -1){
+    if (arg[0] == "goto" && Object.values(obj).findIndex(el => el == arg[1]) > -1) {
         this.goto(arg[1])
     }
 
-    if (arg[0] == "enemistat" && Object.values(mapHandler.map[mapIndex].enemis).findIndex(el=>el == arg[1])){
-        
+    if (arg[0] == "enemistat" && Object.values(mapHandler.map[mapIndex].enemis).findIndex(el => el == arg[1])) {
+
         pjHandler.enemistat(mapHandler.map[mapIndex].enemis[arg[1]]);
         let res = await promptsHandler.confirm("next");
     }
 
-    if (arg[0] == "playerstat"){
+    if (arg[0] == "playerstat") {
         tmp = await action.playerstat(playerHandler.player, "normal");
         let w8t = await promptsHandler.confirm("");
     }
 
-    if (arg[0] == "attack" && Object.values(mapHandler.map[mapIndex].enemis).findIndex(el=>el == arg[1]))
-    {
+    if (arg[0] == "attack" && Object.values(mapHandler.map[mapIndex].enemis).findIndex(el => el == arg[1])) {
         await this.attack(mapHandler.map[mapIndex].enemis[arg[1]]);
-        console.log(mapHandler.map[mapIndex].enemis[arg[1]]);
-        tmp = await promptsHandler.confirm();
     }
-    
+
 
 }
 
@@ -204,18 +334,59 @@ exports.goto = async (room) => {
     console.log("changement de piece pour " + index.mapIndex);
 }
 
-exports.attack = async (target)=>{
-    console.log(`player: ${playerHandler.player.name} `)
-    tmp = await playerSheetHandler.displayPlayerStat(playerHandler.player);
-    pjHandler.displayEnemiStat(target);
+exports.attack = async (target) => {
+    let attackLoop = 1;
+    if (target.pv <= 0) { attackLoop = 0 }
+    while (attackLoop) {
+        console.clear();
 
-    
+        if (target.pv <= 0) { break }
 
-    // on demande ce que l'utilisateur veux faire
-    let UserInput = await promptsHandler.text("what do you want to do?");
-    let arg  = UserInput.split(" ");
+        console.log(`player: ${playerHandler.player.name} `)
+        tmp = await playerSheetHandler.displayPlayerStat(playerHandler.player);
+        pjHandler.enemistat(target);
+        console.log("you can => " + Object.keys(playerHandler.player.cast));
 
+        // on demande ce que l'utilisateur veux faire
+        let UserInput = await promptsHandler.text("what do you want to do?");
+        let arg = UserInput.split(" ");
 
+        // on traite
+        console.clear();
+        if (playerHandler.player.cast[arg[0]] != undefined) {
+            //on cast l'attaque
+            playerHandler.player.cast[arg[0]](target, playerHandler.player);
+
+            // on traite une contre attaque si la target n'est pas morte
+            // si le mob n'est pas appeuré, il cast un sort
+            //courage: ${playerStat.inteligence+playerStat.force}
+            if (target.pv > 0) {
+                let intimidation = randHandler.randomIntInc(1, playerHandler.player.charisma + playerHandler.player.force);
+                let courage = randHandler.randomIntInc(1, target.inteligence + target.force);
+                console.log(`
+    Your intimidation roll: ${intimidation}
+    Your target courage roll: ${courage}   
+    `);
+
+                if (intimidation < courage) {
+                    console.log("your target is not afraid and attack you.");
+                    //console.log(Object.keys(target.cast).length);
+                    casttocast = randHandler.randomIntInc(0,Object.keys(target.cast).length-1);
+                    target.cast[Object.keys(target.cast)[casttocast]](playerHandler.player,target);
+                    //console.log(Object.keys(target.cast)[casttocast]](playerHandler.player,target))
+                }
+                else {
+                    console.log(`${target.name} is afraid and will not attack.`);
+                }
+            }
+        }
+
+        tmp = await promptsHandler.confirm();
+
+        if (arg[0] == "abort") {
+            attackLoop = 0;
+        }
+    }
 }
 
 

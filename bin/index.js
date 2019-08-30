@@ -22,7 +22,7 @@ exports.mapIndexFrom = 1;
 
   arg = process.argv;
 
-  actionHandler.generateRoom(); // va ajouter les enemis dans les room
+  await actionHandler.generateRoom(); // va ajouter les enemis dans les room
   if (arg[2] == "auto") {
     playerHandler.player.name = "toto";
     playerHandler.player = {...playerHandler.player, ...classHandler.classes.warrior  }
@@ -36,10 +36,10 @@ exports.mapIndexFrom = 1;
   }
   console.clear();
   while (1) {
-    
+    if(playerHandler.player.status != "alive"){break}
     console.clear();
     await actionHandler.displayMapInfo(this.mapIndex, this.mapIndexFrom);
 
   }
-
+  console.log(playerHandler.player)
 })();
