@@ -116,7 +116,7 @@ exports.displayPlayerStat = playerStat => {
         boxen(`
       name: ${playerStat.name}   race: ${playerStat.race}   class: ${playerStat.class}      
       
-      pv: ${playerStat.pv}
+      pv: ${playerStat.pv} mana:${playerStat.mana}
       for: ${playerStat.force}   agi: ${playerStat.agility}   wis: ${playerStat.wisdom}
       int: ${playerStat.inteligence}   cha: ${playerStat.charisma+playerStat.force}
       

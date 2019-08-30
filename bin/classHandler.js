@@ -1,3 +1,5 @@
+const castHanler = require("./castHanler");
+
 exports.classes = {
     warrior:{
         pv:50,
@@ -12,7 +14,10 @@ exports.classes = {
         basePoint: 10,
         
         class: "warrior",
-        cast: {},
+        cast: {
+          hit:castHanler.hit,
+          berserk:castHanler.berserkhit
+        },
         equipment:{}
       },
       mage:{
@@ -60,7 +65,9 @@ exports.classes = {
         basePoint: 15,
         
         class: "peasant",
-        cast: {},
+        cast: {
+
+        },
         equipment:{}
       },
       

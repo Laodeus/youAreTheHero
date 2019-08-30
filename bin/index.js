@@ -10,8 +10,10 @@ const playerHandler = require("./playerHandler");
 const playerSheetHandler = require("./playerSheetHandler");
 const objHandler = require("./objHandler");
 const mapHandler = require("./mapHandler");
+const classHandler = require("./classHandler");
 
-let mapIndex = 1;
+exports.mapIndex = 1;
+exports.mapIndexFrom = 1;
 
 // main loop auto launched with (()=>{})()
 (async () => {
@@ -23,6 +25,7 @@ let mapIndex = 1;
   actionHandler.generateRoom(); // va ajouter les enemis dans les room
   if (arg[2] == "auto") {
     playerHandler.player.name = "toto";
+    playerHandler.player = {...playerHandler.player, ...classHandler.classes.warrior  }
   }
   else {
 
@@ -33,8 +36,9 @@ let mapIndex = 1;
   }
   console.clear();
   while (1) {
-    actionHandler.displayMapInfo(5, 1)
-    await promptsHandler.confirm("finished");
+    
+    console.clear();
+    await actionHandler.displayMapInfo(this.mapIndex, this.mapIndexFrom);
 
   }
 

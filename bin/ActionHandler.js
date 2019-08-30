@@ -5,6 +5,7 @@ const classHandler = require("./classHandler");
 const raceHandler = require("./raceHandler");
 const mapHandler = require("./mapHandler");
 const pjHandler = require("./pjHandler");
+const index = require("./index");
 /*===================================================
 
 Function for handle the user sheet
@@ -110,6 +111,7 @@ exports.generateRoom = () => { // c'est ici qu'on genere les enemis dans les roo
 
 
 }
+
 /*===================================================
 
 Function for handle the game room displayed
@@ -132,26 +134,88 @@ exports.displayMapInfo = async (mapIndex, from) => {
             console.log("ennemi : " + elem[0] +" / status:" + elem[1].status );
             elem[1].status == "alive"? aliveEnemisCount++: aliveEnemisCount;
         });
-        aliveEnemisCount > 0 ? console.log(`${aliveEnemisCount} enemis alive. you can attack or go back.`):"";
     }
 
+    //on défini les action que l'utilisateur peux faire.
+    action.playerstat = playerSheetHandler.modPlayer;
     if(aliveEnemisCount > 0 ){
         
         action.attack = this.attack;
+        action.enemistat = this.displayEnemiStat;
         action.goto = this.goto;
+
+        obj[from] = [from]; 
+
+        console.log(`${aliveEnemisCount} enemis alive. you can attack or go back.`);
+
+        console.log(`use  ${Object.keys(action)}`);
+        console.log(`on ${Object.keys(obj)}`);
+
+        
     }
     else{
+        console.log(`${aliveEnemisCount} enemis alive. go where you want.`);
         action.goto = this.goto;
+
+        obj = {...mapHandler.map[mapIndex].linkedTo};
+        
+
+        console.log(`use ${Object.keys(action)}`);
+        console.log(`You can ${Object.values(obj)}`);
+        
     }
 
     
+    // on demande ce que l'utilisateur veux faire
+    let UserInput = await promptsHandler.text("what do you want to do?");
+    let arg  = UserInput.split(" ");
+    
+    
+    // on traite la demande. 
+    if (arg[0] == "goto" &&Object.values(obj).findIndex(el=>el == arg[1]) > -1){
+        this.goto(arg[1])
+    }
+
+    if (arg[0] == "enemistat" && Object.values(mapHandler.map[mapIndex].enemis).findIndex(el=>el == arg[1])){
+        
+        pjHandler.enemistat(mapHandler.map[mapIndex].enemis[arg[1]]);
+        let res = await promptsHandler.confirm("next");
+    }
+
+    if (arg[0] == "playerstat"){
+        tmp = await action.playerstat(playerHandler.player, "normal");
+        let w8t = await promptsHandler.confirm("");
+    }
+
+    if (arg[0] == "attack" && Object.values(mapHandler.map[mapIndex].enemis).findIndex(el=>el == arg[1]))
+    {
+        await this.attack(mapHandler.map[mapIndex].enemis[arg[1]]);
+        console.log(mapHandler.map[mapIndex].enemis[arg[1]]);
+        tmp = await promptsHandler.confirm();
+    }
     
 
-    //on défini les action que l'utilisateur peux faire.
+}
 
+exports.goto = async (room) => {
+    index.mapIndexFrom = index.mapIndex;
+    index.mapIndex = room;
+
+    console.log("changement de piece pour " + index.mapIndex);
+}
+
+exports.attack = async (target)=>{
+    console.log(`player: ${playerHandler.player.name} `)
+    tmp = await playerSheetHandler.displayPlayerStat(playerHandler.player);
+    pjHandler.displayEnemiStat(target);
+
+    
 
     // on demande ce que l'utilisateur veux faire
     let UserInput = await promptsHandler.text("what do you want to do?");
+    let arg  = UserInput.split(" ");
+
+
 }
 
-exports.goto = () => { }
+
